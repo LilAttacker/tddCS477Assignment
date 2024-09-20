@@ -1,0 +1,21 @@
+name: CI workflow   # name of workflow
+
+on:     # when the workflow is triggered
+    push:
+        branches: ["main"]    # activates on a push request to main
+    pull_request:
+        branches: ["main"]    # activates on a pull request to main
+
+jobs:       # what is run when the triggers are actiavted
+    build:
+        runs-on: ubuntu-latest      # what the build uses
+        container: python:3.9-slim      # which version of python this was developed so that this runs smoothly
+        steps:
+        -   name: Checkout              # Name of action
+            uses: actions/checkout@v3   # what it does
+        -   name: Install dependencies  # Need - to create list of steps
+            run: python -m pip install --upgrade pip | pip install -r tddTest/tdd/requirements.txt      # Uses | to split the commands
+        -   name: Lint with flake8
+            run: flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics | flake8 src --count --max-complexity=10 --max-line-length=127 --statistics
+        -   name: Run unit tests with pytests
+            run: pytest -v --tb=short --color=yes --cov=src --cov-report=term-missing
