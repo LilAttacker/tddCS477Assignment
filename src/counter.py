@@ -36,6 +36,6 @@ def update_counter(name):
 def read_counter(name):
     """ Read a counter """
     global COUNTERS
-    if not name in COUNTERS:
+    if name not in COUNTERS:
         return {"Message":f"Counter {name} doesn't exist"}, status.HTTP_404_NOT_FOUND
     return {name: COUNTERS[name]}, status.HTTP_200_OK
