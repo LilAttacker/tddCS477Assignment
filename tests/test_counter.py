@@ -90,3 +90,29 @@ class TestCounterEndPoints:
 
         # Read Counter
         assert COUNTERS["gac"] == 0
+
+    def test_delete_a_counter(self, client):
+        """ It should delete a counter """
+        # Read Counter That Doesn't Exist to Prove its Nonexistence
+        result = client.get('/counters/grave')
+        assert result.status_code == status.HTTP_404_NOT_FOUND
+
+        # Delete Counter That Doesn't Exist
+        result = client.delete('/counters/grave')
+        assert result.status_code == status.HTTP_404_NOT_FOUND
+
+        # Make Counter To Exist
+        result = client.post('/counters/grave')
+        assert result.status_code == status.HTTP_201_CREATED
+
+        # Retrieve Counter to Prove Existence
+        result = client.get('/counters/grave')
+        assert result.status_code == status.HTTP_200_OK
+
+        # Delete Counter
+        result = client.delete('/counters/grave')
+        assert result.status_code == status.HTTP_204_NO_CONTENT
+
+        # Try to Read Counter to Prove Nonexistence Again
+        result = client.get('/counters/grave')
+        assert result.status_code == status.HTTP_404_NOT_FOUND
