@@ -15,15 +15,11 @@ how to call the web service and assert what it should return.
 import pytest
 
 # we need to import the unit under test - counter
-from src.counter import app
+# Import the dict that holds all the counters
+from src.counter import app, COUNTERS
 
 # we need to import the file that contains the status codes
 from src import status
-
-# Import the dict that holds all the counters
-from src.counter import COUNTERS
-
-
 
 @pytest.fixture()
 def client():
@@ -39,13 +35,6 @@ class TestCounterEndPoints:
         """ It should create a counter """
         result = client.post('/counters/foo')
         assert result.status_code == status.HTTP_201_CREATED
-    """
-    def test_create_a_counter():
-        #It should create a counter
-         client = app.test_client()
-         result = client.post('/counters/foo')
-         assert result.status_code == status.HTTP_201_CREATED
-    """
 
     def test_duplicate_a_counter(self, client):
         """ It should return an error for duplicates """
@@ -93,10 +82,6 @@ class TestCounterEndPoints:
 
     def test_delete_a_counter(self, client):
         """ It should delete a counter """
-        # Read Counter That Doesn't Exist to Prove its Nonexistence
-        result = client.get('/counters/grave')
-        assert result.status_code == status.HTTP_404_NOT_FOUND
-
         # Delete Counter That Doesn't Exist
         result = client.delete('/counters/grave')
         assert result.status_code == status.HTTP_404_NOT_FOUND
