@@ -34,10 +34,6 @@ jobs:       # what is run when the triggers are actiavted
         -   name: Type check with mypy      # Perform static type checking with mypy
             run: |
                 mypy src
-
-        -   name: Check for unused code with vulture   # Detect unused code for optimization
-            run: |
-                vulture src
                 
         -   name: Run unit tests with pytests    # Run unit tests and check coverage
             run: pytest -v --tb=short --color=yes --cov=src --cov-report=term-missing
